@@ -49,7 +49,10 @@ del_test_geth:
 start_test_geth:
 	$(GETH) $(DEBUG_OPT) $(GETH_TEST_OPT) $(UNLOCK_LIST) $(PRELOAD_OPT) console 2>>geth.log
 
-watch_test_geth_log:
+watch_m:
+	tail -f main_geth.log
+
+watch_r:
 	tail -f geth.log
 
 ubuntu_get_geth:
@@ -58,15 +61,24 @@ ubuntu_get_geth:
 	sudo apt-get update
 	sudo apt-get install ethereum
 
+mainnet:
+	geth --syncmode "fast" --cache 4096 --datadir=$(DATADIR)/mainnet \
+	--rpcapi "admin,debug,eth,miner,net,personal,rpc,txpool,web3" \
+	--rpc --rpcaddr 127.0.0.1 --rpcport 8547 --port 31313 \
+	--rpccorsdomain '*' \
+	--ipcdisable console 2>>main_geth.log
+
 ropsten:
-	geth --testnet --syncmode "fast" --cache 1024 --datadir=$(DATADIR)/ropsten \
+	geth --testnet --syncmode "fast" --cache 4096 --datadir=$(DATADIR)/ropsten \
 	--bootnodes "enode://94c15d1b9e2fe7ce56e458b9a3b672ef11894ddedd0c6f247e0f1d3487f52b66208fb4aeb8179fce6e3a749ea\
 93ed147c37976d67af557508d199d9594c35f09@192.81.208.223:30303,enode://20c9ad97c081d63397d7b685a412227a40e23c8bdc6688\
 c6f37e97cfbc22d2b4d1db1510d8f61e6a8866ad7f0e17c02b14182d37ea7c3c8b9c2683aeb6b733a1@52.169.14.227:30303,enode://6ce0\
 5930c72abc632c58e2e4324f7c7ea478cec0ed4fa2528982cf34483094e9cbc9216e7aa349691242576d552a2a56aaeae426c5303ded677ce45\
 5ba1acd9d@13.84.180.240:30303,enode://cbe35181d8b56779d1ecc05400a86bccb2be5629eb0a910b1dc91427df50204f38c12ffa827e1\
 235cae0013a22922869e0de579406393e04d2430111e58c828d@13.92.188.53:30303,enode://4027f297dc3f512ef1afb2866b0421e01a69\
-83b255578fcd220df01899138ba200cf1aaecf9f870c6aef50cdaca4a932c1bbd41559117049b8b4da9d9fc81e9b@137.74.46.89:52101" \
+83b255578fcd220df01899138ba200cf1aaecf9f870c6aef50cdaca4a932c1bbd41559117049b8b4da9d9fc81e9b@137.74.46.89:52101,\
+enode://b82d691bab934fca0daefc735b88ef8dd818ca01308169ce9a8d95149aeb32fe39a8b61909c5e23b1de3ecbd1efd0b72d75061085b20\
+c1cce8dbe2accdc17ab7@47.88.152.225:30903" \
 	--rpcapi "admin,debug,eth,miner,net,personal,rpc,txpool,web3" \
 	--rpc --rpcaddr 127.0.0.1 --rpcport 8545 \
 	--rpccorsdomain '*' \
