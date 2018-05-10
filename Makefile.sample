@@ -56,10 +56,12 @@ ubuntu_get_geth:
 	sudo apt-get install ethereum
 
 cp:
+	cp Makefile.sample Makefile
 	cp supervisor/*.conf /etc/supervisor/conf.d/
+	supervisorctl update
 
 mainnet:
-	geth --syncmode "fast" --cache 1024 --datadir=$(DATADIR)/mainnet \
+	/usr/bin/geth --syncmode "fast" --cache 1024 --datadir=$(DATADIR)/mainnet \
 	--rpcapi "admin,debug,eth,miner,net,personal,rpc,txpool,web3" \
 	--rpc --rpcaddr 0.0.0.0 --rpcport 8547 --port 31313 \
 	--rpccorsdomain '*'
