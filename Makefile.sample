@@ -55,7 +55,16 @@ ubuntu_get_geth:
 	sudo apt-get update
 	sudo apt-get install ethereum
 
+cp:
+	cp supervisor/*.conf /etc/supervisor/conf.d/
+
 mainnet:
+	geth --syncmode "fast" --cache 1024 --datadir=$(DATADIR)/mainnet \
+	--rpcapi "admin,debug,eth,miner,net,personal,rpc,txpool,web3" \
+	--rpc --rpcaddr 0.0.0.0 --rpcport 8547 --port 31313 \
+	--rpccorsdomain '*'
+
+mainnet2:
 	nohup geth --syncmode "fast" --cache 1024 --datadir=$(DATADIR)/mainnet \
 	--rpcapi "admin,debug,eth,miner,net,personal,rpc,txpool,web3" \
 	--rpc --rpcaddr 0.0.0.0 --rpcport 8547 --port 31313 \
@@ -68,6 +77,12 @@ watch_m:
 	tail -f main_geth.log
 
 ropsten:
+	/usr/bin/geth --testnet --syncmode "fast" --cache 1024 --datadir=$(DATADIR)/ropsten \
+	--rpcapi "admin,debug,eth,miner,net,personal,rpc,txpool,web3" \
+	--rpc --rpcaddr 0.0.0.0 --rpcport 8545 --port 30303 \
+	--rpccorsdomain '*'
+
+ropsten2:
 	nohup geth --testnet --syncmode "fast" --cache 1024 --datadir=$(DATADIR)/ropsten \
 	--rpcapi "admin,debug,eth,miner,net,personal,rpc,txpool,web3" \
 	--rpc --rpcaddr 0.0.0.0 --rpcport 8545 --port 30303 \
